@@ -8,6 +8,7 @@ PORT = 8080              # The same port as used by the server
 
 data = "Hi world"
 
+
 def send(data):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:

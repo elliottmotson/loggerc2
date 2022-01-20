@@ -17,6 +17,7 @@ class clientcon(socketserver.StreamRequestHandler):
         self.wfile.write(data.encode())
         print(f"Sent {data} to client")
 
+
 class server():
 
     def svr_start(host,port):
