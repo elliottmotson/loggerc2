@@ -13,7 +13,7 @@ def send(data):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             sock.connect((HOST, PORT))
-            sock.send(data.encode())
+            sock.send(data)
             now = datetime.now()
             print(f"Sent {data} to {HOST} at time " + now.strftime("%H:%M:%S"))
         pass
@@ -21,13 +21,3 @@ def send(data):
         print("CONREFUSED: ",e,"RECONNECTING IN (2) SECONDS")
         time.sleep(2)
         send(data)
-
-
-def sendstream(data):
-    while True:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.connect((HOST, PORT))
-            sock.send(data.encode())
-            now = datetime.now()
-            print(f"Sent {data} to {HOST} at time " + now.strftime("%H:%M:%S"))
-            time.sleep(1)

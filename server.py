@@ -2,12 +2,13 @@ import socketserver
 from pathlib import Path
 from datetime import datetime
 import os
+import base64
 
 class clientcon(socketserver.StreamRequestHandler):
     def handle(self):
         now = datetime.now()
         time = str(now.strftime("%H:%M:%S"))
-        data = self.rfile.readline().strip()
+        data = decrypt(self.rfile.readline().strip())
         user = self.client_address[0]
         print("Recieved one request from {}".format(self.client_address[0])," @ ", time)
         savedata(data,user)
@@ -36,11 +37,17 @@ def init():
 
 def savedata(data,user):
     if data is not None:
-        data = (data.decode("utf-8") + "\n")
         print(f"Received: {data}")
         f = open(Path(f'./{user.replace(".","")}.log'), "a")
         f.write(data)
         f.close()
+
+def decrypt(data):
+    print(f"Decrypting {data}")
+    data = base64.b64decode(data)
+    data = data.decode("utf-8")
+    print(data)
+    return data
 
 
 init()
