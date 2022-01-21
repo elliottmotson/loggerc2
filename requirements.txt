@@ -1,1 +1,2 @@
 pynput==1.7.6
+pyshark==0.4.3

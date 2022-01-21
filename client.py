@@ -1,11 +1,15 @@
 import threading
 import time
 import socket
+import subprocess
 from datetime import datetime
+
+
 
 HOST = '127.0.0.1'    # The remote host
 PORT = 8080              # The same port as used by the server
-
+FQDN = "localhost"
+IDENTIFIER_STRING = ".pineapple."
 data = "Hi world"
 
 
@@ -21,3 +25,9 @@ def send(data):
         print("CONREFUSED: ",e,"RECONNECTING IN (2) SECONDS")
         time.sleep(2)
         send(data)
+
+def tunnel(data):
+    target = str(data)+ IDENTIFIER_STRING + FQDN
+    print(target)
+    output = subprocess.call(['nslookup', target],stdout=subprocess.DEVNULL)
+    print("sent ",data)

