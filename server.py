@@ -43,45 +43,36 @@ def savedata(data,user):
     if data is not None:
         print(f"Received: {data}")
         f = open(Path(f'./{user.replace(".","")}.log'), "a")
-        f.write(data+"\n")
+        f.write(str(data)+"\n")
         f.close()
 
 def decrypt(data):
     print(f"Decrypting {data}")
-    data = base64.b64decode(data)
-    data = data.decode("utf-8")
+    data = base64.b64encode(data).decode("ascii")
     print(data)
     return data
 
 def dnscap():
-
     cap = pyshark.LiveCapture(interface="lo", bpf_filter='udp port 53')
     while True:
-
         cap.sniff(timeout=1)
-
         for packet in cap.sniff_continuously(packet_count=5):
             if IDENTIFIER_STRING in packet.dns.qry_name:
                 data = packet.dns.qry_name
+                print("DNS REQUEST: ",data)
                 data = dnsformat(data)
                 user = packet.ip.src
                 savedata(data,user)
         pass
 
 def dnsformat(data):
-    data = data.rstrip(DOMAIN)
-    data = data.rstrip(IDENTIFIER_STRING)
-    print(data)
-    decrypt(data)
+    data = data.strip()
+    data = data.replace(IDENTIFIER_STRING+DOMAIN, "")
+    print("DNS STRIP:",data)
+    data = base64.b64decode(data)
+    print("DECODED DNS REQUEST: ",data)
     return data
 
-"""
-def dnsfilter(query):
-    if query.find(IDENTIFIER_STRING)!=-1:
-        query = query.strip(IDENTIFIER_STRING)
-        query = query.strip(DOMAIN)
-        return query
-"""
 dnscap()
 
 
